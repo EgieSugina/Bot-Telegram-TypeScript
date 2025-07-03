@@ -12,6 +12,161 @@ A powerful Telegram bot that generates beautiful charts using AmCharts v4 and Po
 - **⚡ Performance**: Puppeteer-based chart rendering with subprocess isolation
 - **🛡️ Type Safety**: Full TypeScript implementation with comprehensive interfaces
 
+## System Architecture 🏗️
+
+### High-Level Architecture
+
+```mermaid
+graph TB
+    subgraph "Telegram Platform"
+        TG[Telegram Bot API]
+        USER[User Commands]
+    end
+    
+    subgraph "Bot Application"
+        BOT[Telegram Bot]
+        INDEX[index.ts]
+    end
+    
+    subgraph "Core Services"
+        CP[ChartProcessor]
+        DS[DatabaseService]
+        SSH[SSHTunnel]
+    end
+    
+    subgraph "Chart Generation"
+        CW[ChartWorker]
+        PUPPETEER[Puppeteer Browser]
+        AMCHARTS[AmCharts v4]
+    end
+    
+    subgraph "Data Layer"
+        PG[(PostgreSQL Database)]
+        VIEW[v_daily_region View]
+    end
+    
+    USER --> TG
+    TG --> BOT
+    BOT --> INDEX
+    INDEX --> CP
+    INDEX --> DS
+    DS --> SSH
+    SSH --> PG
+    PG --> VIEW
+    CP --> CW
+    CW --> PUPPETEER
+    PUPPETEER --> AMCHARTS
+    AMCHARTS --> CW
+    CW --> CP
+    CP --> BOT
+    BOT --> TG
+    TG --> USER
+```
+
+### Data Flow Architecture
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Bot as Telegram Bot
+    participant ChartProc as ChartProcessor
+    participant DB as DatabaseService
+    participant SSH as SSHTunnel
+    participant Worker as ChartWorker
+    participant Puppeteer
+    participant PostgreSQL
+    
+    User->>Bot: /latency SUMBAGSEL 4G
+    Bot->>ChartProc: generateChartFromData()
+    ChartProc->>DB: queryData()
+    DB->>SSH: establishConnection()
+    SSH->>PostgreSQL: Connect via tunnel
+    PostgreSQL-->>SSH: Connection established
+    SSH-->>DB: Connection ready
+    DB->>PostgreSQL: SELECT * FROM v_daily_region
+    PostgreSQL-->>DB: Chart data
+    DB-->>ChartProc: Processed data
+    ChartProc->>Worker: generateChart()
+    Worker->>Puppeteer: Launch browser
+    Puppeteer->>Worker: Browser ready
+    Worker->>Puppeteer: Load AmCharts + data
+    Puppeteer-->>Worker: Chart rendered
+    Worker-->>ChartProc: Image buffer
+    ChartProc-->>Bot: Chart image
+    Bot->>User: Send chart image
+```
+
+### Component Architecture
+
+```mermaid
+graph LR
+    subgraph "Application Layer"
+        INDEX[index.ts<br/>Main Application]
+        BOT[Telegram Bot<br/>Command Handler]
+    end
+    
+    subgraph "Service Layer"
+        CP[ChartProcessor<br/>Chart Generation Logic]
+        DS[DatabaseService<br/>Data Access Layer]
+        SSH[SSHTunnel<br/>Secure Connection]
+    end
+    
+    subgraph "Worker Layer"
+        CW[ChartWorker<br/>Subprocess Chart Renderer]
+    end
+    
+    subgraph "External Dependencies"
+        TG[Telegram API]
+        PG[(PostgreSQL)]
+        AM[AmCharts v4]
+        PU[Puppeteer]
+    end
+    
+    INDEX --> BOT
+    BOT --> CP
+    BOT --> DS
+    DS --> SSH
+    SSH --> PG
+    CP --> CW
+    CW --> PU
+    PU --> AM
+    BOT --> TG
+```
+
+### Database Schema Architecture
+
+```mermaid
+erDiagram
+    v_daily_region {
+        date dateid
+        string region
+        string operator
+        string node
+        int sample
+        float download_throughput
+        float upload_throughput
+        float latency
+        float jitter
+        float packetloss
+        string level
+        string area
+    }
+    
+    bot_commands {
+        string command
+        string description
+        string usage
+    }
+    
+    chart_templates {
+        string name
+        string template_type
+        text html_template
+        text css_styles
+        text js_config
+    }
+```
+
 ## Quick Start 🚀
 
 ### Prerequisites
@@ -222,11 +377,9 @@ src/
 ├── services/
 │   ├── ChartProcessor.ts      # Reusable chart generation
 │   ├── DatabaseService.ts     # PostgreSQL connectivity
-│   └── ImageProcessor.ts      # Legacy chart processor
+│   └── SSHTunnel.ts          # SSH tunnel management
 ├── workers/
-│   ├── chartWorker.ts         # Generic chart worker
-│   ├── kpiChartWorker.ts      # Specialized KPI worker
-│   └── imageWorker.ts         # Legacy image worker
+│   └── chartWorker.ts         # Generic chart worker
 └── index.ts                   # Main bot application
 
 examples/
@@ -340,6 +493,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Clear separation of concerns
 - TypeScript interfaces for type safety
 - Modular architecture for easy testing
+
+### Security
+- SSH tunnel support for secure database access
+- Connection pooling for performance
+- Subprocess isolation for chart rendering
 
 ---
 

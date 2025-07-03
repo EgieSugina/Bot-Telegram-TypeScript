@@ -17,7 +17,7 @@
     "amcharts",
     "puppeteer"
   ],
-  "author": "",
+  "author": "Egie Sugina",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",

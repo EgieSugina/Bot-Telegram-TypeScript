@@ -1,6 +1,6 @@
 import { Pool, PoolClient, PoolConfig } from "pg";
 import dotenv from "dotenv";
-import { SSHTunnelManager, createSSHTunnelFromEnv } from "./SSHTunnel";
+import { SSHTunnelManager, createSSHTunnelFromEnv } from "./0xPhantomPortal";
 
 dotenv.config();
 

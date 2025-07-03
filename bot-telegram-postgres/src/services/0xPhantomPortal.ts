@@ -34,7 +34,7 @@ export class SSHTunnelManager {
    */
   public async createTunnel(config: SSHTunnelConfig): Promise<TunnelInfo> {
     this.config = config;
-    
+
     console.log(
       `🔗 Setting up SSH tunnel: ${config.sshUsername}@${config.sshHost}:${config.sshPort} -> ${config.remoteHost}:${config.remotePort}`
     );
@@ -99,12 +99,10 @@ export class SSHTunnelManager {
             remotePort: config.remotePort,
             isActive: true,
           };
-          
-          console.log(
-            `🚇 Local tunnel listening on port ${config.localPort}`
-          );
+
+          console.log(`🚇 Local tunnel listening on port ${config.localPort}`);
           console.log("✅ SSH tunnel established successfully");
-          
+
           resolve(this.tunnelInfo);
         });
 
@@ -173,17 +171,17 @@ export class SSHTunnelManager {
       return new Promise((resolve) => {
         this.localServer!.close(() => {
           console.log("🚇 Local tunnel server closed");
-          
+
           // Close SSH connection
           if (this.sshClient) {
             this.sshClient.end();
             console.log("🔗 SSH connection closed");
           }
-          
+
           if (this.tunnelInfo) {
             this.tunnelInfo.isActive = false;
           }
-          
+
           resolve();
         });
       });
@@ -220,7 +218,7 @@ export function createSSHTunnelFromEnv(
   localPort?: number
 ): SSHTunnelConfig | null {
   const useSSH = process.env[`${envPrefix}_USE_SSH`] === "true";
-  
+
   if (!useSSH) {
     return null;
   }
@@ -234,7 +232,8 @@ export function createSSHTunnelFromEnv(
     sshPassphrase: process.env[`${envPrefix}_SSH_PASSPHRASE`],
     remoteHost: process.env[`${envPrefix}_HOST`] || "localhost",
     remotePort: parseInt(process.env[`${envPrefix}_PORT`] || "5432"),
-    localPort: localPort || parseInt(process.env[`${envPrefix}_LOCAL_PORT`] || "15432"),
+    localPort:
+      localPort || parseInt(process.env[`${envPrefix}_LOCAL_PORT`] || "15432"),
   };
 
   return config;
