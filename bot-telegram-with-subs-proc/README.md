@@ -1,97 +1,97 @@
 # Telegram Chart Bot
 
-A Telegram bot that generates beautiful charts using AmCharts v4 and Puppeteer. The bot creates line charts with sample data and sends them as images to users using **subprocess-based image processing** for better performance and isolation.
+Bot Telegram yang menghasilkan grafik menggunakan AmCharts v4 dan Puppeteer. Bot ini membuat grafik garis dengan data sampel dan mengirimkannya sebagai gambar kepada pengguna menggunakan **pemrosesan gambar berbasis subprocess** untuk performa dan isolasi yang lebih baik.
 
-## Features
+## Fitur
 
-- 📊 Generate line charts with AmCharts v4
-- 🖼️ Convert charts to images using Puppeteer in **child processes**
-- 🔄 **Buffer-based image processing** - no temporary files needed
-- 🤖 Telegram bot interface with Telegraf.js
-- 🎨 Beautiful, modern chart styling
-- ⚡ **Subprocess isolation** for better stability and performance
-- 📱 Responsive and user-friendly
-- 🔧 **TypeScript worker processes** for better type safety
+- 📊 Menghasilkan grafik garis dengan AmCharts v4
+- 🖼️ Mengkonversi grafik menjadi gambar menggunakan Puppeteer dalam **child process**
+- 🔄 **Pemrosesan gambar berbasis buffer** - tidak memerlukan file sementara
+- 🤖 Antarmuka bot Telegram dengan Telegraf.js
+- 🎨 Styling grafik yang modern
+- ⚡ **Isolasi subprocess** untuk stabilitas dan performa lebih baik
+- 📱 Responsif dan ramah pengguna
+- 🔧 **Proses worker TypeScript** untuk keamanan tipe lebih baik
 
-## Prerequisites
+## Prasyarat
 
-- Node.js (v16 or higher)
-- Yarn package manager
-- A Telegram bot token (get from [@BotFather](https://t.me/botfather))
+- Node.js (v16 atau lebih tinggi)
+- Package manager Yarn / NPM / PNPM
+- Token bot Telegram (dapatkan dari [@BotFather](https://t.me/botfather))
 
-## Installation
+## Instalasi
 
-1. **Clone or download this project**
+1. **Clone atau download project ini**
 
 2. **Install dependencies:**
    ```bash
    yarn install
    ```
 
-3. **Set up environment variables:**
+3. **Setup environment variables:**
    ```bash
    cp env.example .env
    ```
    
-   Edit `.env` and add your Telegram bot token:
+   Edit `.env` dan tambahkan token bot Telegram Anda:
    ```
-   BOT_TOKEN=your_telegram_bot_token_here
+   BOT_TOKEN=token_bot_telegram_anda_disini
    NODE_ENV=development
    ```
 
-## Usage
+## Penggunaan
 
-### Development Mode
+### Mode Development
 ```bash
-yarn build  # Build the TypeScript workers first
-yarn dev    # Run the bot in development mode
+yarn build  # Build worker TypeScript terlebih dahulu
+yarn dev    # Jalankan bot dalam mode development
 ```
 
-### Production Mode
+### Mode Production
 ```bash
-yarn build  # Build the TypeScript workers
-yarn start  # Run the compiled bot
+yarn build  # Build worker TypeScript
+yarn start  # Jalankan bot yang sudah dikompilasi
 ```
 
-### Watch Mode (for development)
+### Mode Watch (untuk development)
 ```bash
-yarn watch  # Watch for TypeScript changes
+yarn watch  # Watch perubahan TypeScript
 ```
 
-## Bot Commands
+## Perintah Bot
 
-- `/start` - Welcome message and available commands
-- `/help` - Show help information
-- `/chart` - Generate a sample line chart with random data
+- `/start` - Pesan selamat datang dan perintah yang tersedia
+- `/help` - Tampilkan informasi bantuan
+- `/chart` - Menghasilkan grafik garis sampel dengan data acak
 
-## How It Works
+## Cara Kerja
 
-1. **User sends `/chart` command**
-2. **Bot generates random data** (30 data points over the last 30 days)
-3. **Spawns compiled TypeScript worker process** with Puppeteer for image generation
-4. **Creates HTML with AmCharts v4** - Beautiful, interactive chart
-5. **Renders chart in subprocess** and captures as buffer
-6. **Sends the image buffer** directly to Telegram (no file I/O)
+1. **Pengguna mengirim perintah `/chart`**
+2. **Bot menghasilkan data acak** (30 data selama 30 hari terakhir)
+3. **Spawn proses worker TypeScript yang dikompilasi** dengan Puppeteer untuk pembuatan gambar
+4. **Membuat HTML dengan AmCharts v4** - Grafik interaktif
+5. **Render grafik dalam subprocess** dan capture sebagai buffer
+6. **Mengirim buffer gambar** langsung ke Telegram (tanpa I/O file)
 
-## Architecture
+## Arsitektur
 
-### Subprocess Image Processing
+### Pemrosesan Gambar Subprocess
 
-The bot uses a **child process architecture** for image generation:
+Bot menggunakan **arsitektur child prosess** untuk pembuatan gambar:
 
 ```mermaid
 graph TD
-    A[User sends /chart] --> B[Main Bot Process]
-    B --> C[Generate Random Data]
-    C --> D[Spawn Child Process]
-    D --> E[TypeScript Worker Process]
-    E --> F[Launch Puppeteer Browser]
-    F --> G[Create HTML with AmCharts]
+    A[User mengirim /chart] --> B[Proses Bot Utama]
+    B --> C[Generate Data Acak]
+    C --> D[Spawn Proses Anak]
+    D --> E[Proses Worker TypeScript]
+    E --> F[Launch Browser Puppeteer]
+    F --> G[Create HTML dengan AmCharts]
     G --> H[Render Chart]
-    H --> I[Capture Screenshot as Buffer]
-    I --> J[Send Buffer via stdout]
-    J --> K[Main Process Receives Buffer]
-    K --> L[Send Image to Telegram]
+    H --> I[Capture Screenshot sebagai Buffer]
+    I --> J[Kirim Buffer via stdout]
+    J --> K[Proses Utama Menerima Buffer]
+    K --> L[Kirim Gambar ke Telegram]
     
     style A fill:#e1f5fe
     style B fill:#f3e5f5
@@ -99,7 +99,7 @@ graph TD
     style L fill:#fff3e0
 ```
 
-### Process Flow
+### Alur Proses
 
 ```mermaid
 sequenceDiagram
@@ -109,8 +109,8 @@ sequenceDiagram
     participant P as Puppeteer
     participant T as Telegram
     
-    U->>B: /chart command
-    B->>B: Generate random data
+    U->>B: perintah /chart
+    B->>B: Generate data acak
     B->>W: Spawn worker process
     W->>P: Launch headless browser
     W->>W: Create chart HTML
@@ -123,70 +123,70 @@ sequenceDiagram
     T->>U: Display chart
 ```
 
-### Benefits
+### Keuntungan
 
-- ✅ **Isolation**: Browser crashes don't affect the main bot
-- ✅ **Performance**: Parallel processing capabilities
-- ✅ **Memory Management**: Automatic cleanup of browser instances
-- ✅ **No File I/O**: Direct buffer transfer to Telegram
-- ✅ **Timeout Protection**: Configurable timeouts for image generation
-- ✅ **Type Safety**: TypeScript workers with proper interfaces
-- ✅ **Simplified Deployment**: Always uses compiled JS workers
+- ✅ **Isolasi**: Crash browser tidak mempengaruhi bot utama
+- ✅ **Performa**: Kemampuan pemrosesan paralel
+- ✅ **Manajemen Memori**: Pembersihan otomatis instance browser
+- ✅ **Tanpa File I/O**: Transfer buffer langsung ke Telegram
+- ✅ **Perlindungan Timeout**: Timeout yang dapat dikonfigurasi untuk pembuatan gambar
+- ✅ **Keamanan Tipe**: Worker TypeScript dengan interface yang tepat
+- ✅ **Deployment Sederhana**: Selalu menggunakan worker JS yang dikompilasi
 
-### Project Structure
+### Struktur Project
 
 ```
 ├── src/
-│   ├── index.ts                    # Main bot entry point
+│   ├── index.ts                    # Entry point bot utama
 │   ├── services/
-│   │   ├── ImageProcessor.ts       # Subprocess image processing service
-│   │   └── ChartGenerator.ts       # Legacy file-based generator (kept for reference)
+│   │   ├── ImageProcessor.ts       # Layanan pemrosesan gambar subprocess
+│   │   └── ChartGenerator.ts       # Generator berbasis file legacy (disimpan untuk referensi)
 │   └── workers/
-│       └── imageWorker.ts          # TypeScript child process worker
-├── dist/                           # Compiled JavaScript (auto-created)
+│       └── imageWorker.ts          # Worker proses anak TypeScript
+├── dist/                           # JavaScript yang dikompilasi (dibuat otomatis)
 │   ├── services/
-│   │   ├── ImageProcessor.js       # Compiled image processor
-│   │   └── imageWorker.js          # Compiled worker (copied from workers/)
+│   │   ├── ImageProcessor.js       # Image processor yang dikompilasi
+│   │   └── imageWorker.js          # Worker yang dikompilasi (disalin dari workers/)
 │   └── workers/
-│       └── imageWorker.js          # Compiled TypeScript worker
+│       └── imageWorker.js          # Worker TypeScript yang dikompilasi
 ├── package.json
 ├── tsconfig.json
 ├── env.example
 └── README.md
 ```
 
-## Chart Features
+## Fitur Grafik
 
-- **Line Chart** with smooth animations
-- **Date Axis** showing the last 30 days
-- **Interactive Elements** (cursor, zoom, scrollbar)
-- **Modern Styling** with shadows and rounded corners
-- **Responsive Design** optimized for mobile viewing
+- **Grafik Garis** dengan animasi halus
+- **Axis Tanggal** menampilkan 30 hari terakhir
+- **Elemen Interaktif** (cursor, zoom, scrollbar)
+- **Styling Modern** dengan bayangan dan sudut membulat
+- **Desain Responsif** dioptimalkan untuk tampilan mobile
 
-## Customization
+## Kustomisasi
 
-### Adding New Chart Types
+### Menambah Jenis Grafik Baru
 
-You can extend the `ImageProcessor` class to support different chart types:
+Anda dapat memperluas class `ImageProcessor` untuk mendukung jenis grafik yang berbeda:
 
 ```typescript
-// Example: Add bar chart method
+// Contoh: Tambah method grafik batang
 public async generateBarChartAsBuffer(data: ChartData[]): Promise<Buffer> {
-  // Implementation for bar charts using subprocess
+  // Implementasi untuk grafik batang menggunakan subprocess
 }
 ```
 
-### Modifying Chart Styling
+### Memodifikasi Styling Grafik
 
-Edit the `createChartHTML` function in `src/workers/imageWorker.ts` to customize:
-- Colors and themes
-- Chart dimensions
-- Fonts and styling
-- Animation effects
+Edit fungsi `createChartHTML` di `src/workers/imageWorker.ts` untuk menyesuaikan:
+- Warna dan tema
+- Dimensi grafik
+- Font dan styling
+- Efek animasi
 
-### Adding New Commands
+### Menambah Perintah Baru
 
-Add new commands in `src/index.ts`:
+Tambahkan perintah baru di `src/index.ts`:
 
 ```typescript
 bot.command('barchart', async (ctx) => {
@@ -196,86 +196,82 @@ bot.command('barchart', async (ctx) => {
 });
 ```
 
-### Configuration Options
+### Opsi Konfigurasi
 
-The `ImageProcessor` supports various options:
+`ImageProcessor` mendukung berbagai opsi:
 
 ```typescript
 const imageBuffer = await imageProcessor.generateChartAsBuffer(data, {
-  width: 840,        // Image width
-  height: 560,       // Image height
-  timeout: 30000     // Process timeout in milliseconds
+  width: 840,        // Lebar gambar
+  height: 560,       // Tinggi gambar
+  timeout: 30000     // Timeout proses dalam milidetik
 });
 ```
 
-## TypeScript Worker Benefits
+## Keuntungan Worker TypeScript
 
-### Type Safety
-- **Interface Definitions**: Proper types for `ChartData` and `WorkerInput`
-- **Error Handling**: Type-safe error handling with proper error types
-- **Compile-time Checks**: Catch errors before runtime
+### Keamanan Tipe
+- **Definisi Interface**: Tipe yang tepat untuk `ChartData` dan `WorkerInput`
+- **Penanganan Error**: Penanganan error yang aman dengan tipe error yang tepat
+- **Pengecekan Compile-time**: Tangkap error sebelum runtime
 
-### Maintainability
-- **Better IDE Support**: IntelliSense and autocomplete
-- **Refactoring Safety**: TypeScript ensures consistency across changes
-- **Documentation**: Types serve as inline documentation
+### Kemudahan Pemeliharaan
+- **Dukungan IDE yang Lebih Baik**: IntelliSense dan autocomplete
+- **Keamanan Refactoring**: TypeScript memastikan konsistensi di seluruh perubahan
+- **Dokumentasi**: Tipe berfungsi sebagai dokumentasi inline
 
 ## Troubleshooting
 
-### Common Issues
+### Masalah Umum
 
-1. **Worker script not found**
-   - **Solution**: Run `yarn build` to compile TypeScript workers
-   - **Check**: Ensure `dist/workers/imageWorker.js` exists
+1. **Worker script tidak ditemukan**
+   - **Solusi**: Jalankan `yarn build` untuk mengkompilasi worker TypeScript
+   - **Periksa**: Pastikan `dist/workers/imageWorker.js` ada
 
-2. **Puppeteer fails to launch in subprocess**
-   - On Linux: Install additional dependencies: `sudo apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget`
+2. **Puppeteer gagal launch dalam subprocess**
+   - Di Linux: Install dependencies tambahan: `sudo apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget`
 
-3. **Image processing timeout**
-   - Increase the timeout value in the options
-   - Check internet connection for AmCharts CDN
+3. **Timeout pemrosesan gambar**
+   - Tingkatkan nilai timeout dalam opsi
+   - Periksa koneksi internet untuk AmCharts CDN
 
-4. **Bot token not working**
-   - Verify your bot token is correct
-   - Make sure the bot is not blocked by users
+4. **Token bot tidak bekerja**
+   - Verifikasi token bot Anda benar
+   - Pastikan bot tidak diblokir oleh pengguna
 
-5. **Charts not generating**
-   - Check internet connection (needed for AmCharts CDN)
-   - Verify Puppeteer installation
-   - Check console logs for subprocess errors
+5. **Grafik tidak ter-generate**
+   - Periksa koneksi internet (diperlukan untuk AmCharts CDN)
+   - Verifikasi instalasi Puppeteer
+   - Periksa log console untuk error subprocess
 
-## Performance Considerations
+## Pertimbangan Performa
 
-### Subprocess Benefits
-- **Memory Isolation**: Browser memory is cleaned up automatically
-- **Crash Protection**: Subprocess crashes don't affect the main bot
-- **Parallel Processing**: Multiple chart requests can be processed simultaneously
-- **Resource Management**: Better control over browser instances
+### Keuntungan Subprocess
+- **Isolasi Memori**: Memori browser dibersihkan secara otomatis
+- **Perlindungan Crash**: Crash subprocess tidak mempengaruhi bot utama
+- **Pemrosesan Paralel**: Beberapa permintaan grafik dapat diproses secara bersamaan
+- **Manajemen Sumber Daya**: Kontrol yang lebih baik atas instance browser
 
-### Optimization Tips
-- Adjust timeout values based on your server performance
-- Monitor memory usage in production
-- Consider implementing request queuing for high traffic
+### Tips Optimasi
+- Sesuaikan nilai timeout berdasarkan performa server Anda
+- Monitor penggunaan memori dalam production
+- Pertimbangkan implementasi antrian permintaan untuk traffic tinggi
 
 ## Dependencies
 
-- **telegraf**: Telegram bot framework
-- **puppeteer**: Headless browser for chart rendering
-- **dotenv**: Environment variable management
-- **typescript**: Type safety and modern JavaScript features
+- **telegraf**: Framework bot Telegram
+- **puppeteer**: Browser headless untuk rendering grafik
+- **dotenv**: Manajemen environment variable
+- **typescript**: Keamanan tipe dan fitur JavaScript modern
 
-## License
+## Lisensi
 
-MIT License - feel free to use this project for your own bots!
+MIT License - bebas menggunakan project ini untuk bot Anda sendiri!
 
-## Contributing
+## Kontribusi
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## Support
-
-If you encounter any issues or have questions, please open an issue on GitHub or contact the maintainer. 
+1. Fork repository
+2. Buat feature branch
+3. Lakukan perubahan Anda
+4. Test secara menyeluruh
+5. Submit pull request
