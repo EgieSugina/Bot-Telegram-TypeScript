@@ -1,0 +1,36 @@
+{
+  "name": "telegram-chart-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot that generates charts using AmCharts v4 and Puppeteer",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && npm run copy-worker",
+    "copy-worker": "node -e \"const fs=require('fs');const path=require('path');const srcFile=path.join('dist','workers','chartWorker.js');const destFile=path.join('dist','services','chartWorker.js');if(!fs.existsSync(path.dirname(destFile)))fs.mkdirSync(path.dirname(destFile),{recursive:true});if(fs.existsSync(srcFile)){fs.copyFileSync(srcFile,destFile);console.log('Chart worker copied successfully');}else{console.error('Chart worker not found at:',srcFile);}\"",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "charts",
+    "amcharts",
+    "puppeteer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.3",
+    "puppeteer": "^21.6.1",
+    "ssh2": "^1.16.0",
+    "telegraf": "^4.15.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/pg": "^8.10.9",
+    "@types/ssh2": "^1.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
