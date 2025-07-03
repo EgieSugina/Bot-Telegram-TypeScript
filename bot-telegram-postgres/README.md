@@ -132,41 +132,7 @@ graph LR
     PU --> AM
     BOT --> TG
 ```
-
-### Database Schema Architecture
-
-```mermaid
-erDiagram
-    v_daily_region {
-        date dateid
-        string region
-        string operator
-        string node
-        int sample
-        float download_throughput
-        float upload_throughput
-        float latency
-        float jitter
-        float packetloss
-        string level
-        string area
-    }
-    
-    bot_commands {
-        string command
-        string description
-        string usage
-    }
-    
-    chart_templates {
-        string name
-        string template_type
-        text html_template
-        text css_styles
-        text js_config
-    }
-```
-
+ 
 ## Quick Start 🚀
 
 ### Prerequisites
