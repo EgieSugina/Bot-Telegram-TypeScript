@@ -4,13 +4,16 @@ Proyek koleksi bot Telegram yang dibangun dengan TypeScript, menampilkan berbaga
 
 ## 📁 Struktur Proyek
 
-Proyek ini terdiri dari dua bot Telegram yang berbeda:
+Proyek ini terdiri dari tiga bot Telegram yang berbeda:
 
 ### 🤖 bot-telegram-base
 Bot Telegram komprehensif yang mendemonstrasikan semua fitur dasar dan metode yang tersedia dalam framework Telegraf.js.
 
 ### 📊 bot-telegram-with-subs-proc  
 Bot Telegram khusus untuk menghasilkan grafik menggunakan AmCharts v4 dan Puppeteer dengan pemrosesan gambar berbasis subprocess.
+
+### 🗄️ bot-telegram-postgres
+Bot Telegram canggih yang menghasilkan grafik menggunakan AmCharts v4 dengan data dari PostgreSQL, mendukung SSH tunneling dan arsitektur chart yang dapat digunakan kembali.
 
 ## 🚀 Fitur Umum
 
@@ -49,11 +52,11 @@ Bot komprehensif yang menampilkan semua fitur dasar Telegram bot:
 - Inline keyboards
 - Callback queries
 
-### 📊 Bot Telegram Chart
+### 📊 Bot Telegram Chart (Subprocess)
 
 **Lokasi:** `bot-telegram-with-subs-proc/`
 
-Bot khusus untuk menghasilkan dan mengirim grafik:
+Bot khusus untuk menghasilkan dan mengirim grafik dengan pemrosesan subprocess:
 
 #### Fitur Utama:
 - **Pembuatan Grafik**: Grafik garis dengan AmCharts v4
@@ -68,6 +71,29 @@ Bot khusus untuk menghasilkan dan mengirim grafik:
 - Puppeteer
 - Child Process
 - Buffer processing
+
+### 🗄️ Bot Telegram PostgreSQL
+
+**Lokasi:** `bot-telegram-postgres/`
+
+Bot canggih untuk menghasilkan grafik dengan data dari database PostgreSQL:
+
+#### Fitur Utama:
+- **Multiple Chart Types**: Grafik garis, kolom, dan area
+- **PostgreSQL Integration**: Koneksi langsung ke database dengan connection pooling
+- **SSH Tunnel Support**: Koneksi database yang aman melalui SSH tunneling
+- **Operator-based Legends**: Legend otomatis dengan kode warna untuk operator telekomunikasi
+- **Reusable Architecture**: Arsitektur chart modular yang mendukung data-driven dan HTML template
+- **Performance**: Rendering chart berbasis Puppeteer dengan isolasi subprocess
+
+#### Teknologi:
+- TypeScript
+- Telegraf.js
+- PostgreSQL (pg)
+- AmCharts v4
+- Puppeteer
+- SSH2 (untuk tunneling)
+- Connection pooling
 
 ## 🚀 Cara Memulai
 
@@ -84,9 +110,14 @@ cd BTT
 cd bot-telegram-base
 ```
 
-#### Untuk Bot Telegram Chart:
+#### Untuk Bot Telegram Chart (Subprocess):
 ```bash
 cd bot-telegram-with-subs-proc
+```
+
+#### Untuk Bot Telegram PostgreSQL:
+```bash
+cd bot-telegram-postgres
 ```
 
 ### 3. Install Dependencies
@@ -103,15 +134,40 @@ yarn install
 # Copy file contoh environment
 cp env.example .env
 
-# Edit file .env dan tambahkan token bot Anda
-# BOT_TOKEN=token_bot_telegram_anda_disini
+# Edit file .env dan tambahkan konfigurasi yang diperlukan
+```
+
+#### Konfigurasi Environment untuk Bot PostgreSQL:
+```env
+# Telegram Bot Token
+BOT_TOKEN=your_telegram_bot_token_here
+
+# PostgreSQL Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=bot_telegram
+DB_USER=postgres
+DB_PASSWORD=your_password_here
+
+# SSH Tunnel Configuration (optional)
+DB_USE_SSH=false
+DB_SSH_HOST=your-ssh-server
+DB_SSH_PORT=22
+DB_SSH_USERNAME=root
+DB_SSH_PASSWORD=your-ssh-password
+DB_SSH_PRIVATE_KEY=
+DB_SSH_PASSPHRASE=
+DB_LOCAL_PORT=15432
+
+# Optional: Set to true for development mode
+NODE_ENV=development
 ```
 
 ### 5. Build dan Jalankan Bot
 
 #### Mode Development:
 ```bash
-# Build terlebih dahulu (khusus untuk chart bot)
+# Build terlebih dahulu (khusus untuk chart bot dan postgres bot)
 npm run build
 
 # Jalankan dalam mode development
@@ -145,10 +201,28 @@ npm start
 - `/weather` - Simulasi informasi cuaca
 - `/calculator` - Kalkulator interaktif
 
-### Bot Telegram Chart
+### Bot Telegram Chart (Subprocess)
 - `/start` - Pesan selamat datang dan perintah yang tersedia
 - `/help` - Informasi bantuan
 - `/chart` - Menghasilkan grafik garis dengan data acak
+
+### Bot Telegram PostgreSQL
+- `/start` - Pesan selamat datang dan overview perintah
+- `/help` - Bantuan detail dan instruksi penggunaan
+- `/chart` - Menghasilkan grafik contoh dengan data acak
+- `/latency [region] [node]` - Menampilkan data latency jaringan untuk 30 hari terakhir
+
+#### Penggunaan Perintah Latency:
+```bash
+# Default: SUMBAGSEL region, 4G node
+/latency
+
+# Specify region dan node
+/latency SUMBAGSEL 4G
+
+# Different region
+/latency JABAR 3G
+```
 
 ## 🏗️ Arsitektur
 
@@ -164,7 +238,7 @@ bot-telegram-base/
 └── env.example           # Template environment variables
 ```
 
-### Bot Telegram Chart
+### Bot Telegram Chart (Subprocess)
 ```
 bot-telegram-with-subs-proc/
 ├── src/
@@ -174,6 +248,23 @@ bot-telegram-with-subs-proc/
 │   │   └── ChartGenerator.ts       # Generator berbasis file
 │   └── workers/
 │       └── imageWorker.ts          # Worker proses anak TypeScript
+├── dist/                           # JavaScript yang dikompilasi
+├── package.json
+├── tsconfig.json
+└── env.example
+```
+
+### Bot Telegram PostgreSQL
+```
+bot-telegram-postgres/
+├── src/
+│   ├── index.ts                    # Entry point bot utama
+│   ├── services/
+│   │   ├── ChartProcessor.ts       # Layanan pemrosesan chart modular
+│   │   ├── DatabaseService.ts      # Layanan koneksi database
+│   │   └── SSHTunnelService.ts     # Layanan SSH tunneling
+│   └── workers/
+│       └── chartWorker.ts          # Worker proses anak untuk chart
 ├── dist/                           # JavaScript yang dikompilasi
 ├── package.json
 ├── tsconfig.json
@@ -192,7 +283,7 @@ bot-telegram-with-subs-proc/
 - `npm run dev` - Jalankan dalam mode development dengan auto-restart
 - `npm run build` - Kompilasi TypeScript ke JavaScript
 - `npm start` - Jalankan bot yang sudah dikompilasi
-- `npm run watch` - Watch perubahan dan auto-restart (chart bot)
+- `npm run watch` - Watch perubahan dan auto-restart (chart bot dan postgres bot)
 
 ## 🔒 Keamanan
 
@@ -200,6 +291,7 @@ bot-telegram-with-subs-proc/
 - 🔐 Jaga keamanan token bot Anda
 - 🌍 Gunakan environment variables untuk data sensitif
 - ⚡ Pertimbangkan rate limiting untuk penggunaan produksi
+- 🔑 Untuk bot PostgreSQL, gunakan SSH key authentication untuk tunneling
 
 ## 🚀 Deployment
 
@@ -228,6 +320,8 @@ npm start
 - [Dokumentasi TypeScript](https://www.typescriptlang.org/)
 - [AmCharts Documentation](https://www.amcharts.com/docs/v4/)
 - [Puppeteer Documentation](https://pptr.dev/)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [SSH2 Documentation](https://github.com/mscdex/ssh2)
 
 ## 🤝 Kontribusi
 
@@ -243,9 +337,9 @@ Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) unt
 
 ## 👥 Author
 
-- Nama Author
-- Email: email@example.com
-- GitHub: [@username](https://github.com/username)
+- Egie Sugina
+- Email: Egie Sugina
+- GitHub: [@EgieSugina](https://github.com/EgieSugina)
 
 ## 🆘 Support
 
@@ -261,4 +355,11 @@ Jika Anda mengalami masalah atau memiliki pertanyaan:
 - Rilis awal dengan dua bot Telegram
 - Bot base dengan fitur komprehensif
 - Bot chart dengan subprocess processing
-- Dokumentasi lengkap dalam bahasa Indonesia 
+- Dokumentasi lengkap dalam bahasa Indonesia
+
+### v1.1.0
+- Menambahkan bot-telegram-postgres
+- Integrasi PostgreSQL dengan SSH tunneling
+- Arsitektur chart modular yang dapat digunakan kembali
+- Support multiple chart types (line, column, area)
+- Operator-based legends untuk data telekomunikasi 
