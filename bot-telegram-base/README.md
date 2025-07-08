@@ -323,20 +323,6 @@ bot-telegram-base/
 3. **Update types** in `src/types.ts` if needed
 4. **Test your changes** with `npm run dev`
 
-### Development Workflow
-
-```mermaid
-flowchart LR
-    A[Edit code] --> B[Save file]
-    B --> C{Development mode?}
-    C -->|Yes| D[Auto-restart]
-    C -->|No| E[Manual restart]
-    D --> F[Test changes]
-    E --> F
-    F --> G{Working?}
-    G -->|No| A
-    G -->|Yes| H[Commit changes]
-```
 
 ## 🎮 Interactive Features
 
@@ -396,24 +382,6 @@ npm run dev
 ```bash
 npm run build
 npm start
-```
-
-### Deployment Options
-
-```mermaid
-flowchart TD
-    A[Choose deployment option] --> B{Environment?}
-    B -->|Local| C[Local development]
-    B -->|Cloud| D[Cloud deployment]
-    B -->|VPS| E[VPS deployment]
-    
-    C --> F[npm run dev]
-    D --> G[Deploy to cloud platform]
-    E --> H[Deploy to VPS]
-    
-    G --> I[Set environment variables]
-    H --> I
-    I --> J[Start bot service]
 ```
 
 ## 📚 Learning Resources
