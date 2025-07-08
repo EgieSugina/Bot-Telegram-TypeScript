@@ -1,7 +1,5 @@
 # 📊 PRESENTASI: BOT TELEGRAM
 
-## 🎯 Slide 1: Judul Presentasi
-
 # 🤖 BOT TELEGRAM
 ## Dari API Dasar hingga Implementasi Canggih
 
@@ -11,9 +9,7 @@
 
 ---
 
-## 🎯 Slide 2: Agenda
-
-### 📋 Agenda Presentasi
+## 📋 Agenda Presentasi
 
 1. **Konsep Dasar Bot Telegram** (10 menit)
    - Apa itu Bot Telegram?
@@ -41,9 +37,7 @@
 
 ---
 
-## 🎯 Slide 3: Apa itu Bot Telegram?
-
-### 🤖 Bot Telegram
+## 🤖 Bot Telegram
 
 **Definisi:**
 - Program komputer yang berjalan di platform Telegram
@@ -65,35 +59,24 @@
 
 ---
 
-## 🎯 Slide 4: Cara Kerja Bot
+## 🔄 Arsitektur Bot Telegram
 
-### 🔄 Arsitektur Bot Telegram
+```mermaid
+sequenceDiagram
+    participant User
+    participant Telegram as Telegram API
+    participant Bot
 
-```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   User      │    │  Telegram   │    │    Bot      │
-│             │    │     API     │    │             │
-└─────────────┘    └─────────────┘    └─────────────┘
-       │                   │                   │
-       │ 1. Send Message   │                   │
-       │ ──────────────────►│                   │
-       │                   │ 2. Webhook/       │
-       │                   │    Polling        │
-       │                   │ ──────────────────►│
-       │                   │                   │ 3. Process
-       │                   │                   │    Message
-       │                   │ 4. Send Response  │
-       │                   │ ◄──────────────────│
-       │ 5. Receive        │                   │
-       │    Response       │                   │
-       │ ◄─────────────────│                   │
+    User->>Telegram: 1. Send Message
+    Telegram->>Bot: 2. Webhook/Polling
+    Note over Bot: 3. Process Message
+    Bot->>Telegram: 4. Send Response
+    Telegram->>User: 5. Receive Response
 ```
 
 ---
 
-## 🎯 Slide 5: Telegram Bot API
-
-### 🔗 API Endpoint
+## 🔗 API Endpoint
 
 **Base URL:**
 ```
@@ -126,9 +109,7 @@ curl -X POST https://api.telegram.org/bot1234567890:ABCdefGHIjklMNOpqrsTUVwxyz/s
 
 ---
 
-## 🎯 Slide 6: Metode API Utama
-
-### 📝 Metode API
+## 📝 Metode API
 
 **Update Methods:**
 - `getUpdates` - Mendapatkan updates
@@ -149,9 +130,7 @@ curl -X POST https://api.telegram.org/bot1234567890:ABCdefGHIjklMNOpqrsTUVwxyz/s
 
 ---
 
-## 🎯 Slide 7: Framework Telegraf.js
-
-### 🚀 Telegraf.js
+## 🚀 Telegraf.js
 
 **Keunggulan:**
 - Modern JavaScript/TypeScript
@@ -184,9 +163,7 @@ bot.use(async (ctx, next) => {
 
 ---
 
-## 🎯 Slide 8: Dependencies Utama
-
-### 📦 Package Dependencies
+## 📦 Package Dependencies
 
 **Core Dependencies:**
 ```json
@@ -215,37 +192,26 @@ bot.use(async (ctx, next) => {
 
 ---
 
-## 🎯 Slide 9: Arsitektur Bot
-
-### 🏗️ Struktur Project
-
-```
-bot-telegram/
-├── src/
-│   ├── index.ts              # Entry point
-│   ├── types.ts              # TypeScript definitions
-│   ├── services/             # Business logic
-│   │   ├── ChartService.ts
-│   │   ├── DatabaseService.ts
-│   │   └── ImageProcessor.ts
-│   └── workers/              # Background processes
-│       └── chartWorker.ts
-├── dist/                     # Compiled JavaScript
-├── package.json
-├── tsconfig.json
-└── .env
-```
-
 **Flow Arsitektur:**
-1. User Input → Telegram API
-2. Bot Processing → Business Logic
-3. Response → User
+```mermaid
+flowchart LR
+    A[User Input] --> B[Telegram API]
+    B --> C[Bot Processing]
+    C --> D[Business Logic]
+    D --> E[Response]
+    E --> F[User]
+    
+    style A fill:#e3f2fd
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#fce4ec
+    style F fill:#e3f2fd
+```
 
 ---
 
-## 🎯 Slide 10: Bot Sederhana
-
-### 📝 Implementasi Basic Bot
+## 📝 Implementasi Basic Bot
 
 ```typescript
 import { Telegraf, Context } from 'telegraf';
@@ -279,9 +245,7 @@ bot.launch();
 
 ---
 
-## 🎯 Slide 11: Inline Keyboards
-
-### 🎨 Interactive Buttons
+## 🎨 Interactive Buttons
 
 ```typescript
 import { Markup } from 'telegraf';
@@ -316,9 +280,7 @@ bot.action('charts', async (ctx) => {
 
 ---
 
-## 🎯 Slide 12: Session Management
-
-### 💾 State Management
+## 💾 State Management
 
 ```typescript
 import { session } from 'telegraf';
@@ -355,9 +317,7 @@ bot.command('game', async (ctx) => {
 
 ---
 
-## 🎯 Slide 13: Chart Generation
-
-### 📊 Chart dengan Puppeteer
+## 📊 Chart dengan Puppeteer
 
 ```typescript
 import puppeteer from 'puppeteer';
@@ -400,9 +360,7 @@ class ChartService {
 
 ---
 
-## 🎯 Slide 14: Database Integration
-
-### 🗄️ PostgreSQL Integration
+## 🗄️ PostgreSQL Integration
 
 ```typescript
 import { Pool } from 'pg';
@@ -442,9 +400,7 @@ class DatabaseService {
 
 ---
 
-## 🎯 Slide 15: SSH Tunneling
-
-### 🔐 Secure Database Connection
+## 🔐 Secure Database Connection
 
 ```typescript
 import { Client } from 'ssh2';
@@ -476,9 +432,7 @@ class SSHTunnelService {
 
 ---
 
-## 🎯 Slide 16: Subprocess Processing
-
-### ⚡ Performance Optimization
+## ⚡ Performance Optimization
 
 ```typescript
 import { spawn } from 'child_process';
@@ -510,9 +464,7 @@ class ImageProcessor {
 
 ---
 
-## 🎯 Slide 17: Best Practices
-
-### 🔒 Security & Performance
+## 🔒 Security & Performance
 
 **Security:**
 ```typescript
@@ -545,9 +497,7 @@ bot.use(async (ctx, next) => {
 
 ---
 
-## 🎯 Slide 18: Error Handling
-
-### 🛡️ Robust Error Management
+## 🛡️ Robust Error Management
 
 ```typescript
 // Global error handler
@@ -576,9 +526,7 @@ bot.command('chart', async (ctx) => {
 
 ---
 
-## 🎯 Slide 19: Deployment
-
-### 🚀 Production Deployment
+## 🚀 Production Deployment
 
 **PM2 Deployment:**
 ```javascript
@@ -611,9 +559,7 @@ CMD ["npm", "start"]
 
 ---
 
-## 🎯 Slide 20: Monitoring & Logging
-
-### 📊 Production Monitoring
+## 📊 Production Monitoring
 
 **Logging:**
 ```typescript
@@ -643,9 +589,7 @@ bot.catch((err, ctx) => {
 
 ---
 
-## 🎯 Slide 21: Demo Time!
-
-### 🎬 Live Demo
+## 🎬 Live Demo
 
 **Demo Agenda:**
 1. **Bot Sederhana**
@@ -670,31 +614,7 @@ bot.catch((err, ctx) => {
 
 ---
 
-## 🎯 Slide 22: Q&A Session
-
-### ❓ Questions & Answers
-
-**Common Questions:**
-1. **Q:** Bagaimana cara mendapatkan bot token?
-   **A:** Chat dengan @BotFather di Telegram
-
-2. **Q:** Apakah ada rate limiting?
-   **A:** Ya, Telegram memiliki rate limits (30 messages/second)
-
-3. **Q:** Bagaimana cara deploy ke production?
-   **A:** Gunakan PM2, Docker, atau cloud platforms
-
-4. **Q:** Apakah bisa menggunakan webhook?
-   **A:** Ya, untuk production lebih efisien
-
-5. **Q:** Bagaimana cara handle media files?
-   **A:** Telegraf.js menyediakan methods untuk semua jenis media
-
----
-
-## 🎯 Slide 23: Resources
-
-### 📚 Learning Resources
+## 📚 Learning Resources
 
 **Dokumentasi Resmi:**
 - [Telegram Bot API](https://core.telegram.org/bots/api)
@@ -713,9 +633,7 @@ bot.catch((err, ctx) => {
 
 ---
 
-## 🎯 Slide 24: Kesimpulan
-
-### 🎯 Key Takeaways
+## 🎯 Key Takeaways
 
 **Yang Sudah Dipelajari:**
 1. ✅ Konsep dasar bot Telegram dan API
@@ -734,9 +652,7 @@ bot.catch((err, ctx) => {
 
 ---
 
-## 🎯 Slide 25: Thank You!
-
-### 🙏 Terima Kasih
+## 🙏 Terima Kasih
 
 **Contact Information:**
 - 📧 Email: [your.email@company.com]
@@ -748,11 +664,4 @@ bot.catch((err, ctx) => {
 - Saran untuk improvement sangat dihargai
 - Pertanyaan lebih lanjut bisa ditanyakan
 
-**Resources:**
-- Materi lengkap tersedia di repository
-- Code examples bisa di-download
-- Dokumentasi tambahan tersedia
-
 ---
-
-*Presentasi ini dibuat untuk knowledge sharing internal. Terakhir diperbarui: [Current Date]* 
