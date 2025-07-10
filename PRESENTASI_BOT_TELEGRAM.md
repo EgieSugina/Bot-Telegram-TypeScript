@@ -1,40 +1,6 @@
 # 📊 PRESENTASI: BOT TELEGRAM
 
 # 🤖 BOT TELEGRAM
-## Dari API Dasar hingga Implementasi Canggih
-
-**Presenter:** [Nama Presenter]  
-**Tanggal:** [Tanggal Presentasi]  
-**Durasi:** 60 menit
-
----
-
-## 📋 Agenda Presentasi
-
-1. **Konsep Dasar Bot Telegram** (10 menit)
-   - Apa itu Bot Telegram?
-   - Cara Kerja Bot
-   - Fitur Utama
-
-2. **Telegram Bot API** (15 menit)
-   - API Endpoint
-   - Metode Utama
-   - Authentication
-
-3. **Framework dan Library** (10 menit)
-   - Telegraf.js
-   - Dependencies Utama
-   - Setup Project
-
-4. **Implementasi Praktis** (15 menit)
-   - Bot Sederhana
-   - Chart Generation
-   - Database Integration
-
-5. **Demo & Q&A** (10 menit)
-   - Live Demo
-   - Pertanyaan & Diskusi
-
 ---
 
 ## 🤖 Bot Telegram
